@@ -404,8 +404,6 @@ public void Event_RoundEnd(Event event, const char[] name, bool dontBroadcast)
 public Action Timer_RoundStart(Handle timer)
 {
     g_tRound = INVALID_HANDLE;
-    
-    ChatAll("\x07当前服务器已启动entWatch \x0A::\x04Kyle Present\x0A::");
 
     char classname[32];
     int hammerid;
