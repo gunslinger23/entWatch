@@ -1,8 +1,7 @@
 # SourceMod
-compile.dat
-compile.exe
-spcomp.exe
-compiled/*
+compile.sh
+spcomp
+compiled
 include/admin.inc
 include/adminmenu.inc
 include/adt.inc

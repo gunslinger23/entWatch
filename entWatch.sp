@@ -17,7 +17,7 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-#include <smutils>          //https://github.com/Kxnrl/sourcemod-utils
+#include <smutils>
 #include <cstrike>
 #include <sdkhooks>
 #include <clientprefs>
@@ -118,7 +118,6 @@ char g_szClantag[MAXPLY][32];
 
 float g_fPickup[MAXPLY] = {0.0, ...};
 
-bool g_pZombieEscape = false;
 bool g_pZombieReload = false;
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
@@ -129,15 +128,8 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
     CreateNative("entWatch_ClientHasItem", Native_HasItem);
     CreateNative("entWatch_EntityIsItem",  Native_IsItem);
 
-#if defined __ZombieEscape__
-    MarkNativeAsOptional("ZE_IsSurvivor");
-    MarkNativeAsOptional("ZE_IsInfector");
-#endif
-
-#if defined __zombiereloaded__
     MarkNativeAsOptional("ZR_IsClientHuman");
-    MarkNativeAsOptional("ZR_IsClientZombie");
-#endif  
+    MarkNativeAsOptional("ZR_IsClientZombie"); 
 
     return APLRes_Success;
 }
@@ -259,12 +251,7 @@ public void OnConfigsExecuted()
 
     LoadConfig();
 
-#if defined __ZombieEscape__
-    g_pZombieEscape = LibraryExists("ZombieEscape");
-#endif
-#if defined __zombiereloaded__
     g_pZombieReload = LibraryExists("zombiereloaded");
-#endif
 }
 
 public void OnMapEnd()
@@ -808,7 +795,7 @@ static bool CanClientUseEnt(int client)
 {
     if(g_bBanned[client])
     {
-        Text(client, "你神器被BAN了,\n请到论坛申诉!");
+        Text(client, "你神器被BAN了!");
         return false;
     }
 
@@ -1727,9 +1714,6 @@ static void ClearIcon(int client)
 
 static bool IsInfector(int client)
 {
-    if(g_pZombieEscape)
-        return (ZE_IsInfector(client) || ZE_IsAvenger(client));
-
     if(g_pZombieReload)
         return ZR_IsClientZombie(client);
 
